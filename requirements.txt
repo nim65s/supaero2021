@@ -1,0 +1,2 @@
+meshcat==0.2.0
+example-robot-data==3.10.0
