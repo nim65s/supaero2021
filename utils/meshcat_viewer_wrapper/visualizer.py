@@ -5,7 +5,7 @@ import numpy as np
 import pinocchio as pin
 from pinocchio.visualize import MeshcatVisualizer as PMV
 
-from . import colors
+from . import colors, meshcat_jupyter
 
 
 def materialFromColor(color):
@@ -35,18 +35,12 @@ class MeshcatVisualizer(PMV):
         elif model is not None:
             super().__init__(model, collision_model, visual_model)
 
-        if url is not None:
-            if url == 'classical':
-                url = 'tcp://127.0.0.1:6000'
-            print('Wrapper tries to connect to server <%s>' % url)
-            server = meshcat.Visualizer(zmq_url=url)
-        else:
-            server = None
+        server = meshcat_jupyter.JupyterVisualizer()
 
         if robot is not None or model is not None:
-            self.initViewer(loadModel=True, viewer=server)
+            self.initViewer(viewer=server)
         else:
-            self.viewer = server if server is not None else meshcat.Visualizer()
+            self.viewer = server
 
     def addSphere(self, name, radius, color):
         material = materialFromColor(color)
